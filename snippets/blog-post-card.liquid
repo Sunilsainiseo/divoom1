@@ -1,0 +1,113 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+BLOG POST COMPONENT
+----------------------------------------------------------------------------------------------------------------------
+
+Renders a single blog post (optionally highlighted)
+
+********************************************
+Supported parameters
+********************************************
+
+* article: the article to render. If no article is passed then a placeholder is generated
+* show_excerpt: if set to true, it will show the excerpt first or truncated part of the main content if none is set
+* show_date
+* show_author
+* show_comments_count
+* show_category: if set to true, the first tag of the article is shown as a category
+* featured: if set to true, the blog post takes the full width with a different layout
+* background: the background to use for the card when the blog post is featured
+* text_color: the text color to use for the card when the blog post is featured
+* sizes: the sizes attribute to show for loading the images
+* position: the position of the card in the list. If specified, the theme will eagerly load the first 3 cards images
+{%- endcomment -%}
+
+{%- capture card_content -%}
+  {%- if article -%}
+    {%- if article.image != blank -%}
+      {%- liquid
+        assign loading_strategy = nil
+        
+        if section.index > 3 or position > 3
+          assign loading_strategy = 'lazy'
+        endif
+      -%}
+
+      <a href="{{ article.url }}" class="blog-post-card__figure {% unless featured %}rounded{% endunless %}">
+        {%- if featured != true and show_category and article.tags.size > 0 -%}
+          <span class="badge badge--primary" data-value="{{ article.tags | first | handle }}" >{{ article.tags | first }}</span>
+        {%- endif -%}
+
+        {{- article.image | image_url: width: article.image.width | image_tag: loading: loading_strategy, sizes: sizes, widths: '300,400,500,600,800,1000,1200,1400,1600,1800,2000', class: 'w-full h-full object-cover zoom-image' -}}
+      </a>
+    {%- endif -%}
+  {%- else -%}
+    <div class="blog-post-card__figure {% unless featured %}rounded{% endunless %}">
+      {{- 'image' | placeholder_svg_tag: 'placeholder zoom-image' -}}
+    </div>
+  {%- endif -%}
+
+  <div class="blog-post-card__info">
+    <div class="v-stack {% if featured %}gap-5 sm:gap-6{% else %}gap-3 sm:gap-3{% endif %}">
+      <div class="v-stack gap-3 {% if featured %}sm:gap-5{% else %}sm:gap-3{% endif %}">
+        {%- if featured and show_category and article.tags.size > 0 -%}
+          <span class="badge badge--current badge--lg">{{ article.tags | first }}</span>
+        {%- endif -%}
+
+        {%- if show_date -%}
+            <div class="text-with-icon link-faded">
+             <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.6" clip-path="url(#clip0_449_46891)"><path d="M4 5.83464C4 5.39261 4.17559 4.96868 4.48816 4.65612C4.80072 4.34356 5.22464 4.16797 5.66667 4.16797H15.6667C16.1087 4.16797 16.5326 4.34356 16.8452 4.65612C17.1577 4.96868 17.3333 5.39261 17.3333 5.83464V15.8346C17.3333 16.2767 17.1577 16.7006 16.8452 17.0131C16.5326 17.3257 16.1087 17.5013 15.6667 17.5013H5.66667C5.22464 17.5013 4.80072 17.3257 4.48816 17.0131C4.17559 16.7006 4 16.2767 4 15.8346V5.83464Z" stroke="#111111" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2.5V5.83333" stroke="#111111" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.33301 2.5V5.83333" stroke="#111111" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 9.16797H17.3333" stroke="#111111" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.83301 12.5H10.6663" stroke="#111111" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.6665 12.5V15" stroke="#111111" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></g><defs><clipPath id="clip0_449_46891"><rect width="20" height="20" fill="white" transform="translate(0.666504)"/></clipPath></defs></svg>
+
+              <span class="text-sm">{{- article.published_at | default: 'now' | date: format: 'abbreviated_date' -}}</span>
+            </div>
+          {%- endif -%}
+        <p class="{% if heading_size != blank %}{{ heading_size }}{% elsif featured %}h2{% else %}h5{% endif %}">
+          {%- if article -%}
+            <a href="{{ article.url }}">{{ article.title }}</a>
+          {%- else -%}
+            {{- 'general.on_boarding.blog_post_title' | t -}}
+          {%- endif -%}
+        </p>
+
+        {%- if show_excerpt -%}
+          {%- if article -%}
+            <p {% if featured %}class="text-lg"{% endif %}>{{ article.excerpt_or_content | strip_html | truncate: 76 }}</p>
+          {%- else -%}
+            <p {% if featured %}class="text-lg"{% endif %}>{{ 'general.on_boarding.blog_post_excerpt' | t }}</p>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+
+      {%- if show_author or show_comments_count -%}
+        <div class="blog-post-card__meta">
+          
+
+          {%- if show_author -%}
+            <div class="text-with-icon link-faded">
+              {%- render 'icon' with 'blog-author' -%}
+              <span class="text-sm">{{- article.author | default: 'John D.' -}}</span>
+            </div>
+          {%- endif -%}
+
+          {%- if show_comments_count and article.comments_enabled? -%}
+            <div class="text-with-icon link-faded">
+              {%- render 'icon' with 'blog-comment' -%}
+              <a href="{{ article.url }}#blog-post-comments" class="text-sm">{{ 'blog.comments.count' | t: count: article.comments_count }}</a>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+  <a href="{{ article.url }}" class="button button--xl">Read More</a>
+{%- endcapture -%}
+
+{%- if featured -%}
+  <blog-post-card {% render 'surface', class: 'blog-post-card blog-post-card--featured snap-center group rounded', background: background, text_color: text_color, background_fallback: 'bg-secondary' %}>
+    {{- card_content -}}
+  </blog-post-card>
+{%- else -%}
+  <blog-post-card class="blog-post-card snap-center group image-with-shadow">
+    {{- card_content -}}
+  </blog-post-card>
+{%- endif -%}

@@ -1,0 +1,326 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="faq-tabs-section section-{{ section.id }}-padding">
+  <div class="container">
+  <section-header class="section-header faq-header">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="h2 section-header_title" reveal-on-scroll="true" style="opacity: 1;">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+  </section-header>
+  <div class="tabs">
+    {% for block in section.blocks %}
+      {% if block.type == 'tab' %}
+      <button class="tablinks {% if forloop.first %}active{% endif %}" onclick="openTab(event, 'tab-content-{{ forloop.index }}')" style="background-color:{{ block.settings.bg_color }}">
+        <img class="tab-image" src="{{ block.settings.tab_image | img_url:'master' }}">
+        <span class="tab-text-title">{{ block.settings.tab_title }}</span>
+      </button>
+    {% endif %}
+    {% endfor %}
+  </div>
+  <div class="select-tab">
+    <div class="show-tab">
+      {% for block in section.blocks limit: 1 %}
+        {% if block.type == 'tab' %}
+      <button class="tablinks">
+        <img class="tab-image" src="{{ block.settings.tab_image | img_url:'master' }}">
+        <span class="tab-text-title">{{ block.settings.tab_title }}</span>
+      </button>
+          {% endif %}
+      {% endfor %}
+      <span class="circle-chevron group-hover:colors group-expanded:colors group-expanded:rotate">{%- render 'icon' with 'chevron-bottom-small' -%}</span>
+    </div>
+    <div class="tabs-list" style="display: none;">
+      {% for block in section.blocks %}
+        {% if block.type == 'tab' %}
+      <button class="tablinks mb_tablinks" onclick="openTab(event, 'tab-content-{{ forloop.index }}')">
+        <img class="tab-image" src="{{ block.settings.tab_image | img_url:'master' }}">
+        <span class="tab-text-title">{{ block.settings.tab_title }}</span>
+      </button>
+          {% endif %}
+    {% endfor %}
+    </div>
+  </div>
+    <div class="not-found-message" style="display: none;">No result found</div>
+    
+    <div id="tab-content-1" class="tabcontent" style="display: block;">
+      {% for block in section.blocks %}
+        {% if block.type == 'question' %}
+          {% if block.settings.question != blank %}
+          <div class="faq-accordion">
+            <div class="faq-item{% if block.settings.opened %} open{% endif %}">
+              <div class="faq-question" onclick="toggleFaq(this)">
+                <h3>{{ block.settings.question }}</h3>
+                <span class="plus group-hover:colors group-expanded:colors group-expanded:rotate">{%- render 'icon' with 'plus' -%}</span>
+                <span class="minus group-hover:colors group-expanded:colors group-expanded:rotate" style="display: none;">{%- render 'icon' with 'minus' -%}</span>
+              </div>
+              <div class="faq-answer"{% if block.settings.opened %} style="display: block;"{% endif %}>
+                <p>{{ block.settings.answer }}</p>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+       </div>
+    <div id="tab-content-2" class="tabcontent">
+      {% for block in section.blocks %}
+        {% if block.type == 'question_2' %}
+          {% if block.settings.question != blank %}
+          <div class="faq-accordion">
+            <div class="faq-item{% if block.settings.opened %} open{% endif %}">
+              <div class="faq-question" onclick="toggleFaq(this)">
+                <h3>{{ block.settings.question }}</h3>
+                <span class="plus group-hover:colors group-expanded:colors group-expanded:rotate">{%- render 'icon' with 'plus' -%}</span>
+                <span class="minus group-hover:colors group-expanded:colors group-expanded:rotate" style="display: none;">{%- render 'icon' with 'minus' -%}</span>
+              </div>
+              <div class="faq-answer"{% if block.settings.opened %} style="display: block;"{% endif %}>
+                <p>{{ block.settings.answer }}</p>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+       </div>
+    <div id="tab-content-3" class="tabcontent">
+      {% for block in section.blocks %}
+        {% if block.type == 'question_3' %}
+          {% if block.settings.question != blank %}
+          <div class="faq-accordion">
+            <div class="faq-item{% if block.settings.opened %} open{% endif %}">
+              <div class="faq-question" onclick="toggleFaq(this)">
+                <h3>{{ block.settings.question }}</h3>
+                <span class="plus group-hover:colors group-expanded:colors group-expanded:rotate">{%- render 'icon' with 'plus' -%}</span>
+                <span class="minus group-hover:colors group-expanded:colors group-expanded:rotate" style="display: none;">{%- render 'icon' with 'minus' -%}</span>
+              </div>
+              <div class="faq-answer"{% if block.settings.opened %} style="display: block;"{% endif %}>
+                <p>{{ block.settings.answer }}</p>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+       </div>
+    <div id="tab-content-4" class="tabcontent">
+      {% for block in section.blocks %}
+        {% if block.type == 'question_4' %}
+          {% if block.settings.question != blank %}
+          <div class="faq-accordion">
+            <div class="faq-item{% if block.settings.opened %} open{% endif %}">
+              <div class="faq-question" onclick="toggleFaq(this)">
+                <h3>{{ block.settings.question }}</h3>
+                <span class="plus group-hover:colors group-expanded:colors group-expanded:rotate">{%- render 'icon' with 'plus' -%}</span>
+                <span class="minus group-hover:colors group-expanded:colors group-expanded:rotate" style="display: none;">{%- render 'icon' with 'minus' -%}</span>
+              </div>
+              <div class="faq-answer"{% if block.settings.opened %} style="display: block;"{% endif %}>
+                <p>{{ block.settings.answer }}</p>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+       </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ Tabs Section",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background Color"
+        },
+        {
+          "type": "image_picker",
+          "id": "tab_image",
+          "label": "Tab Image"
+        },
+        {
+          "type": "text",
+          "id": "tab_title",
+          "label": "Tab Title",
+          "default": "Tab Title"
+        }
+      ]
+    },
+    {
+      "type": "question",
+      "name": "Faq Item Tab 1",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Your question here"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Your answer here</p>"
+        }
+      ]
+    },
+    {
+      "type": "question_2",
+      "name": "Faq Item Tab 2",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Your question here 2"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Your answer here 2</p>"
+        }
+      ]
+    },
+    {
+      "type": "question_3",
+      "name": "Faq Item Tab 3",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Your question here 3"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Your answer here 3</p>"
+        }
+      ]
+    },
+    {
+      "type": "question_4",
+      "name": "Faq Item Tab 4",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Your question here 4"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Your answer here 4</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Tabs Section",
+      "category": "Custom sections"
+    }
+  ]
+}
+{% endschema %}
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Ensure the first tab is active by default
+  const firstTab = document.querySelector('.tablinks');
+  const firstTabContent = document.querySelector('.tabcontent');
+  if (firstTab && firstTabContent) {
+    firstTab.classList.add('active');
+    firstTabContent.style.display = 'block';
+  }
+});
+
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+function toggleFaq(element) {
+  const faqItem = element.parentElement;
+  const answer = element.nextElementSibling;
+  const display = answer.style.display;
+  answer.style.display = display === 'block' ? 'none' : 'block';
+
+  if (display === 'block') {
+    faqItem.classList.remove('open');
+  } else {
+    faqItem.classList.add('open');
+  }
+}
+  $(".show-tab").click(function(){
+    $(".tabs-list").slideToggle();
+    $(this).toggleClass("open");
+  });
+  $(".mb_tablinks").click(function(){
+    var src = $(this).children(".tab-image").attr('src');
+    var text = $(this).children(".tab-text-title").text();
+    $(".show-tab .tab-image").attr("src", src);
+    $(".show-tab .tab-text-title").html(text);
+    $(".tabs-list").slideUp();
+  });
+</script>

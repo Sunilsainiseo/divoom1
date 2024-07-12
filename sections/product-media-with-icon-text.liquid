@@ -1,0 +1,325 @@
+{%- render 'section-spacing-collapsing' -%}
+
+{%- comment -%}
+  ------------------------------------------------------------------------------------------------------------------------
+  CSS
+  ------------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+<style>
+  #shopify-section-{{ section.id }} .product-media-with-icon-text {
+    --gradient: linear-gradient(261.01deg, rgba(255, 255, 255, 1), rgba(234, 253, 255, 1) 100%);
+    --background: 234 253 255;
+    background-image: var(--gradient);
+}
+    #shopify-section-{{ section.id }} .social-icons-image-text {
+    --gradient: linear-gradient(261.01deg, rgba(243, 253, 218, 1), rgba(255, 255, 255, 1) 100%);
+    --background: 243, 253, 218;
+    background-image: var(--gradient);
+}
+  #shopify-section-{{ section.id }} {
+    --media-with-text-gap: {% if section.settings.spacing == 'none' %}0{% else %}var(--grid-gutter){% endif %};
+    --media-with-text-item-grid-template: "media" "content" / auto;
+  }
+
+
+  @media screen and (min-width: 1000px) {
+    #shopify-section-{{ section.id }} {
+      --media-with-text-gap: {% if section.settings.spacing == 'none' %}0{% elsif section.settings.spacing == 'small' %}var(--spacing-6){% elsif section.settings.spacing == 'medium' %}var(--spacing-12){% else %}var(--spacing-18){% endif %};
+    }
+  }
+
+     #shopify-section-{{ section.id }} .media-with-text__media {
+    padding: 20px;
+    background-color: {{ section.settings.image-border-color }};
+  }
+    {%- assign media_ratio = section.settings.media_width | divided_by: 50.0 -%}
+    {%- assign content_ratio = 2.0 | minus: media_ratio -%}
+
+
+    @media screen and (min-width: 1000px) {
+      #block-{{ section.id }}-{{ block.id }} {
+        --media-with-text-item-grid-template: {% if section.settings.media_position == 'start' %}"media content" / minmax(0, {{ media_ratio }}fr) minmax(0, {{ content_ratio }}fr){% else %}"content media" / minmax(0, {{ content_ratio }}fr) minmax(0, {{ media_ratio }}fr){% endif %};
+      }
+    }
+</style>
+
+{%- comment -%}
+  ------------------------------------------------------------------------------------------------------------------------
+  LIQUID
+  ------------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+<div class="product-media-with-icon-text {{ section.settings.custom-class }}">
+  <div {% render 'section-properties' %}>
+    <media-with-text class="media-with-text {% if section.settings.spacing == 'none' %}{% if section.settings.full_width %}full-_bleed{% else %}rounded{% endif %}{% endif %}">    
+        <div class="media-with-text__item" {{ block.shopify_attributes }}>
+          <div
+            class="media-with-text__media image-with-shadow {% unless section.settings.spacing == 'none' %}rounded{% endunless %}"
+            reveal-on-scroll="true"
+          >
+            {%- liquid
+              assign loading_strategy = null
+
+              if section.index > 3 or forloop.index > 3
+                assign loading_strategy = 'lazy'
+              endif
+            -%}
+
+            {%- if section.settings.image != blank -%}
+              {%- assign width_ratio = 100.0 | divided_by: block.settings.media_width -%}
+              {%- assign maximum_image_width = settings.page_width | divided_by: width_ratio -%}
+
+              {%- capture sizes -%}(max-width: 999px) 100vw, min({{ maximum_image_width | ceil }}px, {{ section.settings.media_width }}vw){% endcapture %}
+
+              {{-
+                section.settings.image
+                | image_url: width: section.settings.image.width
+                | image_tag:
+                  loading: loading_strategy,
+                  sizes: sizes,
+                  widths: '300,400,500,600,700,800,1000,1200,1400,1600,1800,2000,2200,2400,2600'
+              -}}
+            {%- else -%}
+              {{- 'image' | placeholder_svg_tag: 'aspect-short placeholder' -}}
+            {%- endif -%}
+          </div>
+
+          {%- capture content_class -%}media-with-text__content {% unless section.settings.spacing == 'none' %}rounded{% endunless %}{%- endcapture -%}
+          <div
+            {% render 'surface',
+              class: content_class,
+              background: section.settings.background,
+              background_gradient: section.settings.background_gradient,
+              text_color: section.settings.text_color
+            %}
+          >
+            <div class="prose break-all {{ section.settings.text_position }}" reveal-on-scroll="true">
+              {%- if section.settings.subheading != blank -%}
+                <p class="subheading">{{ section.settings.subheading | escape }}</p>
+              {%- endif -%}
+
+              {%- if section.settings.title != blank -%}
+                <p class="h4">
+                  {%- render 'styled-text',
+                    content: section.settings.title,
+                    gradient: section.settings.text_gradient
+                  -%}
+                </p>
+              {%- endif -%}
+<div class="pmwit-text">
+              {{- section.settings.content -}}
+</div>
+
+               <div class="product-media-iwt">
+              {%- for block in section.blocks -%}              
+                  <div class="product-media-iwt-items">
+                    <div class="pm-iwt-icon">
+                      <img src="{{ block.settings.icon | img_url:'master'}}">
+                    </div>
+                    <div class="pm-iwt-title">
+                      {{ block.settings.title }}
+                    </div>
+                  </div>
+              {% endfor %}
+               </div>
+            </div>
+          </div>
+        </div>
+    </media-with-text>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Media with text",
+  "class": "shopify-section--media-with-text",
+  "tag": "section",
+  "disabled_on": {
+    "templates": ["password"],
+    "groups": ["header", "custom.overlay"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "custom-class",
+      "label": "Custom Class"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "info": "Only has effect when spacing is set to none.",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Spacing",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "small"
+    },
+            {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "1500 x 1500px .jpg recommended"
+        },
+        {
+          "type": "select",
+          "id": "media_position",
+          "label": "Image position",
+          "options": [
+            {
+              "value": "start",
+              "label": "Left"
+            },
+            {
+              "value": "end",
+              "label": "Right"
+            }
+          ],
+          "default": "start"
+        },
+        {
+          "type": "select",
+          "id": "text_position",
+          "label": "Content position",
+          "options": [
+            {
+              "value": "place-self-start text-start",
+              "label": "Top left"
+            },
+            {
+              "value": "place-self-start-center text-center",
+              "label": "Top center"
+            },
+            {
+              "value": "place-self-start-end text-end",
+              "label": "Top right"
+            },
+            {
+              "value": "place-self-center-start text-start",
+              "label": "Middle left"
+            },
+            {
+              "value": "place-self-center text-center",
+              "label": "Middle center"
+            },
+            {
+              "value": "place-self-center-end text-end",
+              "label": "Middle right"
+            },
+            {
+              "value": "place-self-end-start text-start",
+              "label": "Bottom left"
+            },
+            {
+              "value": "place-self-end-center text-center",
+              "label": "Bottom center"
+            },
+            {
+              "value": "place-self-end text-end",
+              "label": "Bottom right"
+            }
+          ],
+          "default": "place-self-center text-center"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Colors",
+          "info": "Gradient replaces solid colors when set. Background is ignored when image is used."
+        },
+        {
+          "type": "color",
+          "id": "image-border-color",
+          "label": "Image Border color",
+        },
+        {
+          "type": "color",
+          "id": "background",
+          "label": "Background",
+          "default": "#000000"
+        },
+        {
+          "type": "color_background",
+          "id": "background_gradient",
+          "label": "Background gradient"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color_background",
+          "id": "text_gradient",
+          "label": "Text gradient"
+        },
+    {
+          "type": "header",
+          "content": "Colors",
+          "info": "Gradient replaces solid colors when set. Background is ignored when image is used."
+        },
+  ],
+  "blocks": [
+     {
+      "type": "icon-text",
+      "name": "Icon and Text",
+      "settings": [
+       {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Image"
+        },
+           {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        }
+      ]
+     }
+  ],
+  "presets": [
+    {
+      "name": "Product Media with Icon text"
+    }
+  ]
+}
+{% endschema %}

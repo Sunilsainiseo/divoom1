@@ -1,0 +1,254 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+<div class="section section-full video-block section section-{{ section.id }}-padding" style="overflow:hidden;">
+<div class="">
+  <div class="video-main-sec section-stack">
+      <div class="collection__title title-wrapper title-wrapper--no-top-margin">
+      {% if section.settings.caption != blank %}
+      <p class="subheading section-subheading">
+        {{ section.settings.caption }}
+      </p>
+      {% endif %}
+      {%- if section.settings.title != blank -%}
+       <h2 class="h2 section-header_title" reveal-on-scroll="true" style="opacity: 1;">{{ section.settings.title }}</h2>
+      {%- endif -%}
+    </div>
+    <div class="video-sec video-block-slide">
+    {% for block in section.blocks %}
+    <div class="video-main-block">
+    <div class="video-image-block" data-index="{{ forloop.index }}">
+      {% if block.settings.video_link != blank %}
+        <video src="{{ block.settings.video_link }}"{% if block.settings.autoplay %} autoplay="autoplay"{% endif %}{% if block.settings.controls %} controls="controls"{% endif %}{% if block.settings.sound %} muted="muted"{% endif %}{% if block.settings.loop %} loop="loop"{% endif %} preload="metadata" playsinline="playsinline"></video>
+      {% else %}
+     {{ block.settings.video | video_tag: image_size: '1100x', autoplay: block.settings.autoplay, controls: block.settings.controls, muted: block.settings.sound, loop:block.settings.loop }}  
+     {% endif %}
+     </div>
+     </div>
+    {% endfor %}
+    </div>
+  </div>
+</div>
+</div>
+
+{% schema %}
+  {
+    "name": "Reel Videos",
+    "settings": [
+        {
+      "type": "text",
+      "id": "caption",
+      "default": "Add a tagline",
+      "label": "caption"
+    },   
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Featured collection",
+      "label": "Title"
+    },  
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },   
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+    ],
+     "blocks": [
+    {
+      "type": "video",
+      "name": "Reel Video",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "header",
+          "content": "OR"
+        },
+        {
+          "type": "textarea",
+          "id": "video_link",
+          "label": "Video Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "autoplay",
+          "label": "Autoplay",
+          "default":true
+        },
+        {
+          "type": "checkbox",
+          "id": "sound",
+          "label": "Sound Disabled",
+          "info":"For autoplay Sound must Disabled",
+          "default":true
+        },
+        {
+          "type": "checkbox",
+          "id": "loop",
+          "label": "Loop Video",
+          "default":true
+        },
+        {
+          "type": "checkbox",
+          "id": "controls",
+          "label": "Show Control Bar",
+          "default":true
+        }
+        ]
+    }
+     ],
+     "presets": [
+    {
+      "name": "Reel Videos"
+    }
+  ]
+  }
+{% endschema %}
+
+<script>
+// $(".video-image-block").click(function () {
+//  var dindex = $(this).attr("data-index");
+//  $(".modal").fadeIn(500);
+//   $('body').addClass('open-modal');
+// $(".custom__lightbox-slider").slick({
+//     autoplay: false,
+//     infinite: false,
+//     arrows: false,
+//     dots: true,
+//   });
+
+//   // Add custom class to each dot
+//   $('.slick-dots li').each(function(index) {
+//     $(this).addClass('custom_' + (index + 1));
+//   });
+
+//   // Trigger click on the dot corresponding to the clicked image
+//   $(".slick-dots li.custom_" + dindex).trigger("click");
+// setTimeout(function(){
+//   var videoElement = $('.custom_slide-list.blocklist.slick-slide.slick-current.slick-active').find('.logimgss #my-vid');
+//    videoElement.get(0).play(); 
+
+//     videoElement.prop('muted', false);
+// }, 800);
+ 
+// });
+
+
+
+// Close the modal and destroy the Slick carousel
+// $(".close").click(function () {
+//   $(".modal").hide();
+//   $(".custom__lightbox-slider").slick("unslick");
+//   $('.logimgss video').trigger('pause');
+//   $('body').removeClass('open-modal');
+//   videoElement.prop('muted', true);
+// });
+
+//     document.addEventListener("DOMContentLoaded", function() {
+//             const videos = document.querySelectorAll(".video-image-block video");
+//             const playButtons = document.querySelectorAll(".play-button");
+
+//             function playNextVideo(currentVideo) {
+//                 const currentIndex = Array.from(videos).indexOf(currentVideo);
+//                 const nextIndex = (currentIndex + 1) % videos.length;
+//                 const nextVideo = videos[nextIndex];
+
+//                 currentVideo.pause();
+//                 nextVideo.play();
+//             }
+
+//             function togglePlayButton(video, show) {
+//                 const playButton = video.parentElement.querySelector(".play-button");
+//                 playButton.style.display = show ? 'block' : 'none';
+//             }
+
+//             videos.forEach((video, index) => {
+//                 video.addEventListener("ended", () => {
+//                     playNextVideo(video);
+//                 });
+
+//                 video.addEventListener("play", () => {
+//                     togglePlayButton(video, false);
+//                 });
+
+//                 video.addEventListener("pause", () => {
+//                     togglePlayButton(video, true);
+//                 });
+
+//                 playButtons[index].addEventListener("click", () => {
+//                     video.play();
+//                 });
+
+//                 togglePlayButton(video, true);
+//             });
+
+//             // Start playing the first video
+//             if (videos.length > 0) {
+//                 videos[0].play();
+//             }
+//         });   
+  $('.video-block-slide').slick({
+  dots: true,
+  infinite: false,
+  slidesToShow: 4,
+  slidesToScroll: 4,
+  prevArrow: '<div class="slick-prev"><img src="{{ 'Arrow-left.png' | asset_url }}" /></div>',
+  nextArrow: '<div class="slick-next"><img src="{{ 'Arrow-right.png' | asset_url }}" /></div>',
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        infinite: true,
+        dots: true
+      }
+    },
+    {
+      breakpoint: 600,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2
+      }
+    }
+    
+  ]
+});
+</script>

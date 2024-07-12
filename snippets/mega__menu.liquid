@@ -1,0 +1,143 @@
+{%- if link.links.size > 0 -%}
+  <style>
+    {% comment %}
+    @media screen and (min-width: 1150px) {
+      #mega-menu-{{ mega_menu_block.id }} {
+        --mega-menu-nav-column-max-width: {% if mega_menu_block.settings.submenu_style == 'bold_text' %}{% if link.links.size <= 2 %}240px{% else %}200px{% endif %}{% else %}{% if link.links.size <= 2 %}180px{% else %}160px{% endif %}{% endif %};
+        --mega-menu-justify-content: {% if link.links.size == 0 or mega_menu_block.settings.layout == 'horizontal_center' and mega_menu_block.settings.stretch_promo == false %}center{% else %}space-between{% endif %};
+        --mega-menu-nav-gap: {% if mega_menu_block.settings.stretch_promo %}var(--spacing-12){% else %}var(--spacing-8){% endif %};
+
+        {% if link.links.size > 3 %}
+          --column-list-max-width: 75%;
+        {% endif %}
+      }
+    }
+
+    @media screen and (min-width: 1400px) {
+      #mega-menu-{{ mega_menu_block.id }} {
+        --mega-menu-nav-column-max-width: {% if mega_menu_block.settings.submenu_style == 'bold_text' %}{% if link.links.size == 1 %}260px{% elsif link.links.size == 2 %}240px{% else %}210px{% endif %}{% else %}{% if link.links.size == 1 %}220px{% elsif link.links.size == 2 %}200px{% else %}180px{% endif %}{% endif %};
+        --mega-menu-nav-gap: {% if mega_menu_block.settings.layout == 'horizontal_center' %}var(--spacing-12){% else %}var(--spacing-16){% endif %};
+
+        {% if link.links.size > 4 %}
+          --column-list-max-width: 75%;
+        {% else %}
+          --column-list-max-width: max-content;
+        {% endif %}
+      }
+    }
+
+    @media screen and (min-width: 1600px) {
+      #mega-menu-{{ mega_menu_block.id }} {
+        --mega-menu-nav-gap: var(--spacing-16);
+      }
+    }
+
+    @media screen and (min-width: 1800px) {
+      #mega-menu-{{ mega_menu_block.id }} {
+        --mega-menu-nav-gap: var(--spacing-20);
+      }
+    } 
+{% endcomment %}
+    .mega-menu__nav {
+    display: block;
+}
+    .sub__link_mega {
+    display: none;
+}
+     .mega-menu__nav li:hover ul {
+    display: flex;
+    flex-wrap: wrap;
+}
+   .mega-menu__nav li ul {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: none;
+    padding: 3rem 0;
+    background: #f6f5f3;
+    width: calc(100% - 390px);
+}
+    ul.mega-menu__nav {
+    max-width: 250px;
+}
+     ul.mega-menu__nav li {
+    max-width: 100%;
+}
+    .mega-menu__nav > li:first-child ul {
+    display: flex;
+    flex-wrap: wrap;
+}
+   li.custom__sub_box {
+    width: 33.33%;
+}
+  </style>
+{%- endif -%}
+{%- for sub_link in link.links -%}
+  {% if forloop.first %}
+{%- for sub_sub_link in sub_link.links -%}
+  {% if forloop.last %}
+{% assign total_links = forloop.index %}
+    {% endif %}
+  {% endfor %}
+    {% endif %}
+  {% endfor %}
+<div id="mega-menu-{{ mega_menu_block.id }}" class="mega-menu {% if link.links.size == 0 %}justify-center{% endif %}">
+  <div class="mega-menu-wrapper" data-id="{{ total_links }}">
+  {%- if link.links.size > 0 -%}
+    <ul class="mega-menu__nav" role="list">
+      {%- for sub_link in link.links -%}
+        <li class="mm-sub-nav v-stack gap-4 justify-items-start{% if forloop.first %} v-sub-active{% endif %}" data-value="{{ sub_link.title | handle }}">
+          <a {% if sub_link.url != '#' %}href="{{ sub_link.url }}"{% endif %} class="{% if mega_menu_block.settings.submenu_style == 'bold_heading' %}h5{% endif %}" {% if sub_link.current %}aria-current="page"{% endif %}>
+            <span {% if sub_link.url != '#' %}class="{% if mega_menu_block.settings.submenu_style == 'bold_text' %}link-faded{% else %}reversed-link hover:show{% endif %}"{% endif %}>
+              {{- sub_link.title -}}
+            </span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+    
+    <div class="mega-menu__subnav-wrapper">
+      
+      {%- for sub_link in link.links -%}
+          {%- if sub_link.levels > 0 -%}
+{%- for sub_sub_link in sub_link.links -%}
+  {% if forloop.last %}
+{% assign total_links = forloop.index %}
+    {% endif %}
+  {% endfor %}
+
+            
+            <div class="mega-menu__subnav-item{% if forloop.first %} mm-subnav-active{% endif %}"  data-value="{{ sub_link.title | handle }}" data-id="{{ total_links }}">
+            <ul class="v-stack gap-2 justify-items-start sub__link_mega" role="list">
+              {%- for sub_sub_link in sub_link.links -%}
+                <li class="custom__sub_box">
+                  <a href="{{ sub_sub_link.url }}" class="{% if mega_menu_block.settings.submenu_style == 'bold_text' %}h5{% else %}link_-faded{% endif %}">
+                    <span class="mm-top-text">
+                    <span {% if mega_menu_block.settings.submenu_style == 'bold_text' %}class="reversed-link hover:show"{% endif %}>{{- sub_sub_link.title -}}</span>
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.6377 6H9.3577" stroke="#555555" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M5.99805 2.64014L9.35805 6.00014L5.99805 9.36014" stroke="#555555" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+                    </span>
+                <span class="mm-bottom-text">
+                  <span>Mini Karaoke Machine</span>
+                   {% if sub_sub_link.type == 'product_link' %}
+                     <div class="mmb-img-wrapper">
+                       <div class="mmb-img">
+                       <img src="{{ sub_sub_link.object.featured_image | img_url:'500x'}}">
+                       </div>
+                     </div>
+                      {% endif %}
+                </span>
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+            </div>
+          {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+</div>

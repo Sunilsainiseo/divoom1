@@ -1,0 +1,392 @@
+{%- render 'section-spacing-collapsing' -%}
+
+{%- comment -%}
+  ------------------------------------------------------------------------------------------------------------------------
+  CSS
+  ------------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+<style>
+    #shopify-section-{{ section.id }} .product-media-with-icon-text {
+      --gradient: linear-gradient(261.01deg, rgba(255, 255, 255, 1), rgba(234, 253, 255, 1) 100%);
+      --background: 234 253 255;
+      background-image: var(--gradient);
+  }
+      #shopify-section-{{ section.id }} .social-icons-image-text {
+      --gradient: linear-gradient(261.01deg, rgba(243, 253, 218, 1), rgba(255, 255, 255, 1) 100%);
+      --background: 243, 253, 218;
+      background-image: var(--gradient);
+  }
+    #shopify-section-{{ section.id }} {
+      --media-with-text-gap: {% if section.settings.spacing == 'none' %}0{% else %}var(--grid-gutter){% endif %};
+      --media-with-text-item-grid-template: "media" "content" / auto;
+    }
+
+
+    @media screen and (min-width: 1000px) {
+      #shopify-section-{{ section.id }} {
+        --media-with-text-gap: {% if section.settings.spacing == 'none' %}0{% elsif section.settings.spacing == 'small' %}var(--spacing-6){% elsif section.settings.spacing == 'medium' %}var(--spacing-12){% else %}var(--spacing-18){% endif %};
+      }
+    }
+
+       #shopify-section-{{ section.id }} .media-with-text__media {
+      padding: 20px;
+      background-color: {{ section.settings.image-border-color }};
+    }
+      {%- assign media_ratio = section.settings.media_width | divided_by: 50.0 -%}
+      {%- assign content_ratio = 2.0 | minus: media_ratio -%}
+
+
+      @media screen and (min-width: 1000px) {
+        #block-{{ section.id }}-{{ block.id }} {
+          --media-with-text-item-grid-template: {% if section.settings.media_position == 'start' %}"media content" / minmax(0, {{ media_ratio }}fr) minmax(0, {{ content_ratio }}fr){% else %}"content media" / minmax(0, {{ content_ratio }}fr) minmax(0, {{ media_ratio }}fr){% endif %};
+        }
+      }
+</style>
+
+{%- comment -%}
+  ------------------------------------------------------------------------------------------------------------------------
+  LIQUID
+  ------------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+<div class="product-media-with-icon-text {{ section.settings.custom-class }}">
+  <div {% render 'section-properties' %}>
+    <div class="student-media-text_header">
+      {% render 'breadcrumbs' %}
+      {%- if section.settings['main-title'] != blank -%}
+        <h2 class="h2 section-header_title">
+          {%- render 'styled-text',
+            content: section.settings['main-title'],
+            text_color: section.settings.heading_color,
+            gradient: section.settings.heading_gradient
+          -%}
+        </h2>
+      {%- endif -%}
+    </div>
+
+    <media-with-text class="media-with-text {% if section.settings.spacing == 'none' %}{% if section.settings.full_width %}full-_bleed{% else %}rounded{% endif %}{% endif %}">
+      <div class="media-with-text__item" {{ block.shopify_attributes }}>
+        <div
+          class="media-with-text__media image-with-shadow {% unless section.settings.spacing == 'none' %}rounded{% endunless %}"
+          reveal-on-scroll="true"
+        >
+          {%- liquid
+            assign loading_strategy = null
+
+            if section.index > 3 or forloop.index > 3
+              assign loading_strategy = 'lazy'
+            endif
+          -%}
+
+          {%- if section.settings.image != blank -%}
+            {%- assign width_ratio = 100.0 | divided_by: block.settings.media_width -%}
+            {%- assign maximum_image_width = settings.page_width | divided_by: width_ratio -%}
+
+            {%- capture sizes -%}(max-width: 999px) 100vw, min({{ maximum_image_width | ceil }}px, {{ section.settings.media_width }}vw){% endcapture %}
+
+            {{-
+              section.settings.image
+              | image_url: width: section.settings.image.width
+              | image_tag:
+                loading: loading_strategy,
+                sizes: sizes,
+                widths: '300,400,500,600,700,800,1000,1200,1400,1600,1800,2000,2200,2400,2600'
+            -}}
+          {%- else -%}
+            {{- 'image' | placeholder_svg_tag: 'aspect-short placeholder' -}}
+          {%- endif -%}
+        </div>
+
+        {%- capture content_class -%}media-with-text__content {% unless section.settings.spacing == 'none' %}rounded{% endunless %}{%- endcapture -%}
+        <div
+          {% render 'surface',
+            class: content_class,
+            background: section.settings.background,
+            background_gradient: section.settings.background_gradient,
+            text_color: section.settings.text_color
+          %}
+        >
+          <div class="prose break-all {{ section.settings.text_position }}" reveal-on-scroll="true">
+            {%- if section.settings.subheading != blank -%}
+              <p class="subheading">{{ section.settings.subheading | escape }}</p>
+            {%- endif -%}
+
+            {%- if section.settings.title != blank -%}
+              <p class="h4">
+                {%- render 'styled-text', content: section.settings.title, gradient: section.settings.text_gradient -%}
+              </p>
+            {%- endif -%}
+            <div class="pmwit-text">
+              {{- section.settings.content -}}
+            </div>
+            <div class="student-mt-button_wrapper h-stack gap-8">
+            {%- if section.settings.link_text != blank -%}
+              <div>
+              <a href="{{ section.settings.link_url }}" class="button button--xl" is="custom-button"><svg width="30" height="18" viewBox="0 0 30 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M24.049 0.323036C22.2445 0.323036 15.6062 0.323036 15.6062 0.323036V17.6312C15.6062 17.6312 20.4879 17.6312 22.4111 17.6312C24.7289 17.6312 27.8954 16.5134 27.8954 12.8772C27.8954 10.9463 26.9413 9.8518 25.7482 9.24027C27.7495 8.77902 29.4894 7.56402 29.4894 4.92027C29.4894 1.24313 26.3866 0.323036 24.049 0.323036ZM21.7417 14.257C20.9343 14.257 19.467 14.257 19.4287 14.257V10.2721L21.7417 10.2978C22.9523 10.2978 24.0498 10.8627 24.0498 12.277C24.049 13.6921 22.9523 14.257 21.7417 14.257ZM23.3668 7.65001C21.8333 7.65001 19.4287 7.65001 19.4287 7.65001V3.69563C19.4287 3.69563 21.8333 3.69563 23.3668 3.69563C24.9002 3.69563 25.5936 4.54903 25.5936 5.67322C25.5928 6.79663 24.9002 7.65001 23.3668 7.65001ZM0 5.44342C0 3.3308 1.25131 0 7.28388 0C13.664 0 14.386 5.2899 14.386 5.2899L10.8569 6.30404C10.5747 4.58761 9.2071 3.69965 7.2831 3.69965C5.02995 3.69965 3.93484 4.36742 3.93484 5.51814C3.93484 9.06508 14.2513 6.17865 14.2513 12.9158C14.2513 15.824 11.9759 17.959 7.64973 17.959C3.66705 17.959 1.91601 15.173 1.38281 13.549L4.99487 12.5213C5.44436 13.4863 6.1872 14.2594 7.85613 14.2594C9.3951 14.2594 10.3149 13.631 10.3149 12.8073C10.3165 9.79714 0 12.5333 0 5.44342Z" fill="#111111"/>
+</svg>
+ | {{ section.settings.link_text }}</a>
+              <p style="margin-top: 10px;text-align: center;">Poered By <svg width="127" height="15" viewBox="0 0 127 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M78.1276 0.252029C76.6966 0.252029 71.433 0.252029 71.433 0.252029V13.7557C71.433 13.7557 75.3033 13.7557 76.8289 13.7557C78.6664 13.7557 81.1772 12.8836 81.1772 10.0467C81.1772 8.54021 80.4203 7.68629 79.4743 7.20918C81.0612 6.84997 82.4404 5.90202 82.4404 3.83938C82.4404 0.969879 79.9798 0.252029 78.1276 0.252029ZM76.2975 11.1232C75.6567 11.1232 74.4933 11.1232 74.4637 11.1232V8.01417L76.2975 8.03427C77.2569 8.03427 78.1276 8.47502 78.1276 9.57839C78.1276 10.6824 77.2569 11.1232 76.2975 11.1232ZM77.5858 5.96848C76.3699 5.96848 74.4637 5.96848 74.4637 5.96848V2.8833C74.4637 2.8833 76.3699 2.8833 77.5858 2.8833C78.8017 2.8833 79.3516 3.5491 79.3516 4.4262C79.3516 5.30264 78.8017 5.96848 77.5858 5.96848ZM126.164 10.7539C126.164 12.0999 124.988 14.0228 121.905 14.0228C118.595 14.0228 117.65 11.9714 117.556 10.8699L120.338 10.3665C120.53 11.3959 121.438 11.5501 121.906 11.5514C122.376 11.552 123.095 11.4273 123.095 10.7539C123.095 9.02478 117.403 10.246 117.403 5.79543C117.403 5.02867 117.726 2.33034 121.906 2.33034C125.552 2.33034 126.256 4.67007 126.391 5.77036L123.619 6.28638C123.498 5.25815 122.905 4.77979 121.906 4.77979C121.177 4.77979 120.467 5.0851 120.467 5.79543C120.466 7.84365 126.164 6.41861 126.164 10.7539ZM0 4.24688C0 2.59867 0.992164 0 5.77539 0C10.8342 0 11.4067 4.12716 11.4067 4.12716L8.60843 4.91835C8.3847 3.5792 7.30027 2.88643 5.77474 2.88643C3.98824 2.88643 3.11994 3.40742 3.11994 4.30519C3.11994 7.07252 11.2999 4.82053 11.2999 10.0768C11.2999 12.3457 9.49568 14.0115 6.06544 14.0115C2.90761 14.0115 1.51921 11.8378 1.09643 10.5708L3.96043 9.76901C4.31687 10.522 4.90584 11.125 6.22915 11.125C7.4494 11.125 8.1787 10.6348 8.1787 9.99216C8.17996 7.64364 0 9.7784 0 4.24688ZM102.257 2.59867V3.69581C102.257 3.69581 101.069 2.33097 98.9496 2.33097C96.829 2.33097 94.2406 4.0168 94.2406 8.17722C94.2406 12.3376 96.9096 14.0234 99.096 14.0234C101.216 14.0234 102.404 12.6585 102.404 12.6585V13.7557H105.328V2.59867H102.257ZM99.8188 11.1176C98.2837 11.1176 97.311 10.0329 97.311 8.17722C97.311 6.32141 98.2837 5.23685 99.8188 5.23685C101.355 5.23685 102.327 6.32141 102.327 8.17722C102.327 10.0329 101.355 11.1176 99.8188 11.1176ZM37.5979 0.252029V3.69581C37.5979 3.69581 36.4105 2.33097 34.2903 2.33097C32.1701 2.33097 29.5816 4.0168 29.5816 8.17722C29.5816 12.3376 32.2503 14.0234 34.4362 14.0234C36.5564 14.0234 37.7438 12.6585 37.7438 12.6585V13.7557H40.668V0.252029H37.5979ZM35.1604 11.1176C33.6248 11.1176 32.6522 10.0329 32.6522 8.17722C32.6522 6.32141 33.6248 5.23685 35.1604 5.23685C36.6961 5.23685 37.6687 6.32141 37.6687 8.17722C37.6687 10.0329 36.6955 11.1176 35.1604 11.1176ZM18.0062 13.4836C17.663 13.6924 16.6835 13.8892 15.9675 13.8892C13.5654 13.8892 12.2416 12.3113 12.2416 9.02419V0.252029H15.3627V2.60055H17.8419V5.24059H15.3627V9.12072C15.3627 10.3859 16.0256 11.125 17.0721 11.125C17.5569 11.125 18.0062 10.9169 18.0062 10.9169V13.4836ZM93.4852 7.79664C93.4852 4.971 91.307 2.33472 88.0955 2.33472C84.4383 2.33472 82.5136 4.78794 82.5136 8.18912C82.5136 11.5627 84.6127 14.0435 88.2366 14.0435C91.3587 14.0435 93.1023 12.0385 93.5606 10.2605L90.6595 9.43988C90.4215 10.268 89.661 11.1307 88.2366 11.1307C87.2669 11.1307 86.4657 10.6975 86.0052 9.9113L93.4852 7.79664ZM85.5898 7.89443C85.5898 6.05998 86.5197 5.0124 88.0955 5.0124C89.1739 5.0124 89.9943 5.54152 90.372 6.54153L85.5898 7.89443ZM23.9174 11.1176C24.9633 11.1176 25.6262 10.3789 25.6262 9.11444V2.59867H28.7474V9.11444C28.7474 12.3257 27.1486 14.0234 23.918 14.0234C20.6875 14.0234 19.0887 12.3257 19.0887 9.11444V2.59867H22.2099V9.11444C22.2086 10.3789 22.8716 11.1176 23.9174 11.1176ZM58.4276 5.23685C57.3817 5.23685 56.7189 5.97535 56.7189 7.23993V13.7557H53.5976V7.23993C53.5976 4.02873 55.1966 2.33097 58.4268 2.33097C61.6575 2.33097 63.2564 4.02873 63.2564 7.23993V13.7557H60.1351V7.23993C60.1359 5.97535 59.4736 5.23685 58.4276 5.23685ZM111.556 5.23685C110.51 5.23685 109.847 5.97535 109.847 7.23993V13.7557H106.726V7.23993C106.726 4.02873 108.325 2.33097 111.555 2.33097C114.786 2.33097 116.385 4.02873 116.385 7.23993V13.7557H113.264V7.23993C113.264 5.97535 112.602 5.23685 111.556 5.23685ZM52.633 7.79664C52.633 4.971 50.4556 2.33472 47.2432 2.33472C43.5864 2.33472 41.6613 4.78794 41.6613 8.18912C41.6613 11.5627 43.7606 14.0435 47.385 14.0435C50.5067 14.0435 52.2502 12.0385 52.7092 10.2605L49.8079 9.43988C49.5697 10.268 48.8093 11.1307 47.385 11.1307C46.4148 11.1307 45.6135 10.6975 45.1533 9.9113L52.633 7.79664ZM44.7368 7.89443C44.7368 6.05998 45.6674 5.0124 47.2428 5.0124C48.3216 5.0124 49.1419 5.54152 49.5195 6.54212L44.7368 7.89443ZM70.1464 13.4823C69.8033 13.6911 68.8237 13.888 68.1079 13.888C65.7057 13.888 64.3818 12.31 64.3818 9.02293V0.250151H67.5031V2.59867H69.9823V5.2387H67.5031V9.11887C67.5031 10.384 68.1659 11.1232 69.2126 11.1232C69.6971 11.1232 70.1464 10.915 70.1464 10.915V13.4823Z" fill="#6523E3"/>
+</svg>
+</p>
+</div>
+            {%- endif -%}
+               {%- if section.settings.link_text_2 != blank -%}
+              <a href="{{ section.settings.link_url_2 }}" class="link"> {{ section.settings.link_text_2 }}</a>
+              {% endif %}
+            </div>
+
+            <div class="product-media-iwt">
+              {%- for block in section.blocks -%}
+                <div class="product-media-iwt-items">
+                  <div class="pm-iwt-icon">
+                    <img src="{{ block.settings.icon | img_url:'master'}}">
+                  </div>
+                  <div class="pm-iwt-title">
+                    {{ block.settings.title }}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </media-with-text>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Student Media with text",
+  "class": "shopify-section--media-with-text",
+  "tag": "section",
+  "disabled_on": {
+    "templates": ["password"],
+    "groups": ["header", "custom.overlay"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "custom-class",
+      "label": "Custom Class"
+    },
+        {
+      "type": "text",
+      "id": "main-subheading",
+      "label": "Main Subheading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "main-title",
+      "label": "Main Heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "info": "Only has effect when spacing is set to none.",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Spacing",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "small"
+    },
+            {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "1500 x 1500px .jpg recommended"
+        },
+        {
+          "type": "select",
+          "id": "media_position",
+          "label": "Image position",
+          "options": [
+            {
+              "value": "start",
+              "label": "Left"
+            },
+            {
+              "value": "end",
+              "label": "Right"
+            }
+          ],
+          "default": "start"
+        },
+        {
+          "type": "select",
+          "id": "text_position",
+          "label": "Content position",
+          "options": [
+            {
+              "value": "place-self-start text-start",
+              "label": "Top left"
+            },
+            {
+              "value": "place-self-start-center text-center",
+              "label": "Top center"
+            },
+            {
+              "value": "place-self-start-end text-end",
+              "label": "Top right"
+            },
+            {
+              "value": "place-self-center-start text-start",
+              "label": "Middle left"
+            },
+            {
+              "value": "place-self-center text-center",
+              "label": "Middle center"
+            },
+            {
+              "value": "place-self-center-end text-end",
+              "label": "Middle right"
+            },
+            {
+              "value": "place-self-end-start text-start",
+              "label": "Bottom left"
+            },
+            {
+              "value": "place-self-end-center text-center",
+              "label": "Bottom center"
+            },
+            {
+              "value": "place-self-end text-end",
+              "label": "Bottom right"
+            }
+          ],
+          "default": "place-self-center text-center"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+        },
+           {
+          "type": "text",
+          "id": "link_text",
+          "label": "Button text 1"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Button URL 1"
+        },
+           {
+          "type": "text",
+          "id": "link_text_2",
+          "label": "Button text 2"
+        },
+        {
+          "type": "url",
+          "id": "link_url_2",
+          "label": "Button URL 2"
+        },
+        {
+          "type": "header",
+          "content": "Colors",
+          "info": "Gradient replaces solid colors when set. Background is ignored when image is used."
+        },
+        {
+          "type": "color",
+          "id": "image-border-color",
+          "label": "Image Border color",
+        },
+        {
+          "type": "color",
+          "id": "background",
+          "label": "Background",
+          "default": "#000000"
+        },
+        {
+          "type": "color_background",
+          "id": "background_gradient",
+          "label": "Background gradient"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color_background",
+          "id": "text_gradient",
+          "label": "Text gradient"
+        },
+            {
+          "type": "color",
+          "id": "button_background",
+          "label": "Button background"
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "label": "Button text"
+        },
+    {
+          "type": "header",
+          "content": "Colors",
+          "info": "Gradient replaces solid colors when set. Background is ignored when image is used."
+        },
+  ],
+  "blocks": [
+     {
+      "type": "icon-text",
+      "name": "Icon and Text",
+      "settings": [
+       {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Image"
+        },
+           {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        }
+      ]
+     }
+  ],
+  "presets": [
+    {
+      "name": "Student Media with text"
+    }
+  ]
+}
+{% endschema %}

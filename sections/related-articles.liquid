@@ -1,0 +1,107 @@
+<div {% render 'section-properties' %}>
+  <div class="section-stack">
+       {%- render 'section-header', subheading: section.settings.subheading, heading: section.settings.title, heading_color: section.settings.heading_color, heading_gradient: section.settings.heading_gradient, content: section.settings.content, link_text: section.settings.link_text, link_url: section.settings.link_url -%}
+
+    <div class="rel-article h-stack gap-8 sm:gap-10">
+      {% assign article_found = false %}
+      {% for a in blog.articles limit: 4 %}
+        {% assign skip_article = false %}
+        {% if article_found == false and forloop.last %}
+          {% assign skip_article = true %}
+        {% endif %}
+        {% if article.id == a.id %}
+          {% assign article_found = true %}
+          {% assign skip_article = true %}
+        {% endif %}
+        {% unless skip_article %}
+          <div class="rel-article-item one-quarter">
+      {%- render 'blog-post-card', article: a, heading_size: 'h5', show_excerpt: section.settings.show_excerpt, show_date: section.settings.show_date, show_author: section.settings.show_author, show_comments_count: show_comments_count -%}
+          </div>
+        {% endunless %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Related Article",
+  "class": "shopify-section--article-recommendations",
+    "disabled_on": {
+    "groups": ["header", "custom.overlay"]
+  },
+  "tag": "section",
+  "settings": [
+     {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": true
+    },
+ {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "Blog posts"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content"
+    },
+        {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "Show excerpt",
+      "default": true
+    },
+     {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_comments_count",
+      "label": "Show comments count",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colors",
+      "info": "Gradient replaces solid colors when set."
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background"
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient",
+      "label": "Background gradient"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Related Articles"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,163 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+<div class="video-gallery-main section section-{{ section.id }}-padding" style="overflow:hidden;{% if section.settings.bg_color != blank %}background-color:{{ section.settings.bg_color }};{% endif %}">
+<div class="page-width">
+  <div class="video-main-sec section-stack">
+      <div class="video-gallery-header title-wrapper title-wrapper--no-top-margin ">
+      {% if section.settings.caption != blank %}
+      <p class="image-with-text__text image-with-text__text--caption section-subheading">
+        {{ section.settings.caption | escape }}
+      </p>
+      {% endif %}
+      {%- if section.settings.title != blank -%}
+       <h2 class="h2 section-header_title" reveal-on-scroll="true" style="opacity: 1;">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      {%- if section.settings.description != blank -%}
+       <div class="rte" reveal-on-scroll="true" style="opacity: 1;">{{ section.settings.description }}</div>
+      {%- endif -%}
+    </div>
+    <div class="video-sec video__youtube">
+    {% for block in section.blocks %}
+      <div class="block-video-wrapper">
+   <div class="image-with-shadow">
+     <div class="vg-wrapper-item" style="background:{{ block.settings.bg_color }};">
+       <div class="vg-wrapper-item-inner">
+        
+      {% if block.settings.video_link != blank %}
+        <video src="{{ block.settings.video_link }}"{% if block.settings.autoplay %} autoplay="autoplay"{% endif %}{% if block.settings.controls %} controls="controls"{% endif %}{% if block.settings.sound %} muted="muted"{% endif %}{% if block.settings.loop %} loop="loop"{% endif %} preload="metadata" playsinline="playsinline"></video>
+      {% else %}
+     {{ block.settings.video | video_tag: image_size: '1100x', autoplay: block.settings.autoplay, controls: block.settings.controls, muted: block.settings.sound, loop:block.settings.loop }}  
+     {% endif %}
+       </div>
+       </div>
+   </div>
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+</div>
+</div>
+
+{% schema %}
+  {
+    "name": "Video Gallery",
+    "settings": [
+      {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+      {
+      "type": "text",
+      "id": "caption",
+      "default": "YouTube Videos",
+      "label": "caption"
+    },
+   
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Hear from Top Creators",
+      "label": "Title"
+    },
+   
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+       {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+    ],
+      "blocks": [
+    {
+      "type": "video",
+      "name": "video",
+      "settings": [
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Frame Color"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "header",
+          "content": "OR"
+        },
+        {
+          "type": "textarea",
+          "id": "video_link",
+          "label": "Video Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "autoplay",
+          "label": "Autoplay",
+          "default":true
+        },
+        {
+          "type": "checkbox",
+          "id": "sound",
+          "label": "Sound Disabled",
+          "info":"For autoplay Sound must Disabled",
+          "default":true
+        },
+        {
+          "type": "checkbox",
+          "id": "loop",
+          "label": "Loop Video",
+          "default":true
+        },
+        {
+          "type": "checkbox",
+          "id": "controls",
+          "label": "Show Control Bar",
+          "default":true
+        }
+        ]
+    }
+     ],
+     "presets": [
+    {
+      "name": "Video Gallery"
+    }
+  ]
+  }
+{% endschema %}

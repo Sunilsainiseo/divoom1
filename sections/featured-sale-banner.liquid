@@ -1,0 +1,145 @@
+<style>
+  {% if section.settings.bg-image !=blank %}
+#shopify-section-{{ section.id }} .featured-sale-section{
+  background-image: linear-gradient(256deg, #F8F2FA 0%, #FFF 100.11%) ,url({{ section.settings.bg-image | img_url:'master' }});
+  background-position: top;
+  background-size: cover;
+}
+    {% endif %}
+</style>
+
+<div class="featured-sale-section">
+  <div class="section">
+    {% render 'breadcrumbs' %}
+    <div class="featured-sale-discount">
+      <div class="featured-left-content">
+        <div class="left-image">   
+          <img src="{{ section.settings.first-img | img_url: 'master'}}" class="left-inner-image">
+          <img src="{{ section.settings.first-mobile-img | img_url: 'master'}}" class="left-mobile-image">
+        </div>
+        <div class="left-content">
+          {%- if section.settings.subheading != blank -%}
+                <p class="subheading" data-sequence="subheading">{{ section.settings.subheading | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.title != blank -%}
+                <div class="slideshow-heading" data-sequence="heading"> {%- render 'styled-text', content: section.settings.title, apparition_effect: true -%}</div>
+          {%- endif -%}
+           {%- if section.settings.text != blank -%}
+                <div class="slideshow-subtext">{{ section.settings.text}}</div>
+          {%- endif -%}
+          {%- if section.settings.button_text != blank -%}
+                {%- render 'button', href: section.settings.button_link, content: section.settings.button_text -%}
+              {%- endif -%}
+        </div>
+      </div>
+       <div class="featured-right-content">
+        <div class="right-image">
+          <img src="{{ section.settings.second-img | img_url: 'master'}}" class="right-inner-image">
+          <img src="{{ section.settings.second-mobile-img | img_url: 'master'}}" class="right-mobile-image">
+        </div>
+        <div class="right-content">
+          {%- if section.settings.subheading-2 != blank -%}
+                <p class="subheading" data-sequence="subheading">{{ section.settings.subheading-2 | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.title-2 != blank -%}
+                <div class="slideshow-heading" data-sequence="heading">{%- render 'styled-text', content: section.settings.title-2, apparition_effect: true -%}</div>
+          {%- endif -%}
+           {%- if section.settings.text-2 != blank -%}
+                <div class="slideshow-subtext">{{ section.settings.text-2}}</div>
+          {%- endif -%}
+          {%- if section.settings.button_text-2 != blank -%}
+                {%- render 'button', href: section.settings.button_link-2, content: section.settings.button_text-2 -%}
+              {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Featured Sale Banner",
+    "settings": [
+       {
+        "type": "image_picker",
+        "id": "bg-image",
+        "label": "Background Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "first-img",
+        "label": "First Img"
+      },
+      {
+        "type": "image_picker",
+        "id": "first-mobile-img",
+        "label": "First Mobile Image"
+      },
+      {
+        "type": "text",
+        "id": "subheading",
+        "label": "Subheading"
+      },
+      {
+        "type": "richtext",
+        "id": "title",
+        "label": "Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "text",
+        "label": "Text"
+      },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Button Text"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button Link"
+      },
+      {
+        "type": "image_picker",
+        "id": "second-img",
+        "label": "Second Img"
+      },
+      {
+        "type": "image_picker",
+        "id": "second-mobile-img",
+        "label": "Second Mobile Image"
+      },
+      {
+        "type": "text",
+        "id": "subheading-2",
+        "label": "Subheading-2"
+      },
+      {
+        "type": "richtext",
+        "id": "title-2",
+        "label": "Heading 2"
+      },
+      {
+        "type": "richtext",
+        "id": "text-2",
+        "label": "Text 2"
+      },
+      {
+        "type": "text",
+        "id": "button_text-2",
+        "label": "Button Text 2"
+      },
+      {
+        "type": "url",
+        "id": "button_link-2",
+        "label": "Button Link 2"
+      }
+    ],
+    "presets":[
+      {
+        "name": "Featured Sale Banner"
+      }
+    ]
+  }
+{% endschema %}

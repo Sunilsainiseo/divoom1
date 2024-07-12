@@ -1,0 +1,53 @@
+<div class="search-box" style="background-color: {{ section.settings.background }};">
+ <div class="container">
+    {% render 'breadcrumbs' %}
+   {%- if section.settings.title != blank -%}
+      <h2 class="h2 section-header_title">
+        {%- render 'styled-text', content: section.settings.title, text_color: section.settings.heading_color, gradient: section.settings.heading_gradient -%}
+      </h2>
+    {%- endif -%}
+   <div class="fieldset-with-submit image-with-shadow"><div class="form-control">
+     <input class="input is-floating custom__search" type="text" placeholder="Start Typing" autocomplete="email">
+   </div>
+    {%- render 'button', type: 'submit', content: 'Search', size: 'xl', background: section.settings.button_background, text_color: section.settings.button_text_color -%}
+  </div>
+ </div>
+</div>
+{% schema %}
+  {
+    "name": "Search box",
+    "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Title"
+    },
+    {
+      "type": "header",
+      "content": "Colors",
+      "info": "Gradient replaces solid colors when set."
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text"
+    }
+    ],
+    "presets": [
+      {
+        "name": "Search box"
+      }
+    ]
+  }
+{% endschema %}

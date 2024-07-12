@@ -1,0 +1,150 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+MEGA MENU PANEL
+----------------------------------------------------------------------------------------------------------------------
+
+This component is used to show the different links in different panel for the menu drawer
+
+********************************************
+Supported variables
+********************************************
+
+* main_menu: the menu to show for the primary menu
+* secondary_menu: the secondary menu (shown on mobile)
+* mega_menu_block: use when mega menu is set to drawer
+* is_mega_menu: set to true if mega menu is set to drawer
+* layout
+{%- endcomment -%}
+
+<div class="panel-list__wrapper">
+  <div class="panel">
+    <div class="panel__wrapper" {% if mega_menu_block.settings.promo_content_layout == 'grid' or mega_menu_block.settings.promo_content_layout == 'collage' %}style="--panel-wrapper-justify-content: flex-start"{% endif %}>
+      <div class="panel__scroller v-stack gap-8">
+        {%- if is_mega_menu -%}
+          <button is="close-button" aria-label="{{ 'general.accessibility.close' | t | escape }}" {%- if section.settings.opening_from == 'bottom' -%}class="sm-max:hidden"{%- endif -%}>
+            {%- render 'icon' with 'close', width: 19, height: 19 -%}
+          </button>
+        {%- endif -%}
+
+        <ul class="v-stack">
+          {%- for link in main_menu.links -%}
+            {%- unless is_mega_menu -%}
+              {% liquid
+                assign link_title_downcase = link.title | downcase
+                assign mega_menu_block = ''
+                assign is_image_shown = false
+
+                for block in section.blocks
+                  assign menu_item_downcase = block.settings.menu_item | strip | downcase
+
+                  if menu_item_downcase == link_title_downcase
+                    assign mega_menu_block = block
+
+                  if block.settings.drawer_link_image == 'show'
+                    assign is_image_shown = true
+                    break
+                  endif
+
+                    break
+                  endif
+                endfor %}
+
+            {%- else -%}
+              {%- assign is_image_shown = false -%}
+
+              {%- if mega_menu_block.settings.drawer_link_image == 'show' -%}
+                {%- assign is_image_shown = true -%}
+              {%- endif -%}
+
+            {%- endunless -%}
+
+            <li class="h3 sm:h4 site-nav-mob">
+              {%- if link.links.size > 0 or mega_menu_block != '' and is_mega_menu == false -%}
+                <button class="sub_nav_toggle text-with-icon w-full group justify-between link-padding" aria-expanded="false" data-panel="1-{% increment level_1 %}">
+                  <span>{{ link.title }}</span>
+                  <span class="">
+                  <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11.5306 1.53025L6.5306 6.53025C6.46092 6.60017 6.37813 6.65564 6.28696 6.6935C6.1958 6.73135 6.09806 6.75084 5.99935 6.75084C5.90064 6.75084 5.8029 6.73135 5.71173 6.6935C5.62057 6.65564 5.53778 6.60017 5.4681 6.53025L0.468098 1.53025C0.327202 1.38935 0.248047 1.19825 0.248047 0.998996C0.248047 0.799739 0.327202 0.608642 0.468098 0.467746C0.608994 0.32685 0.800091 0.247695 0.999348 0.247695C1.19861 0.247695 1.3897 0.32685 1.5306 0.467746L5.99997 4.93712L10.4693 0.467122C10.6102 0.326225 10.8013 0.24707 11.0006 0.24707C11.1999 0.24707 11.391 0.326225 11.5318 0.467122C11.6727 0.608018 11.7519 0.799114 11.7519 0.998372C11.7519 1.19763 11.6727 1.38873 11.5318 1.52962L11.5306 1.53025Z" fill="#555555"/>
+                  </svg>
+  
+                  </span>
+                </button>
+                
+                <div class="nav-panel-sub-nav">
+                  {% for sub_link in link.links %}
+                    {%- if sub_link.links.size > 0 -%}
+                      <div class="nav-top-sub-item">
+                      <button class="sub_sub_nav_toggle text-with-icon w-full group justify-between link-padding" aria-expanded="false" data-panel="1-{% increment level_1 %}">
+                        <span>{{ sub_link.title }}</span>
+                        <span >
+                  <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11.5306 1.53025L6.5306 6.53025C6.46092 6.60017 6.37813 6.65564 6.28696 6.6935C6.1958 6.73135 6.09806 6.75084 5.99935 6.75084C5.90064 6.75084 5.8029 6.73135 5.71173 6.6935C5.62057 6.65564 5.53778 6.60017 5.4681 6.53025L0.468098 1.53025C0.327202 1.38935 0.248047 1.19825 0.248047 0.998996C0.248047 0.799739 0.327202 0.608642 0.468098 0.467746C0.608994 0.32685 0.800091 0.247695 0.999348 0.247695C1.19861 0.247695 1.3897 0.32685 1.5306 0.467746L5.99997 4.93712L10.4693 0.467122C10.6102 0.326225 10.8013 0.24707 11.0006 0.24707C11.1999 0.24707 11.391 0.326225 11.5318 0.467122C11.6727 0.608018 11.7519 0.799114 11.7519 0.998372C11.7519 1.19763 11.6727 1.38873 11.5318 1.52962L11.5306 1.53025Z" fill="#555555"/>
+                  </svg></span>
+                      </button>
+                      <div class="nav-panel-sub_sub_nav">
+                      <div class="np-sub_nav_wrapper">
+                        {% for sub_sub_link in sub_link.links %}
+                          <a href="{{ sub_sub_link.url }}" class="link-padding {% if mega_menu_block.settings.submenu_style == 'bold_text' %}h5{% else %}link_-faded{% endif %}">
+                              <span class="mm-top-text">
+                              <span {% if mega_menu_block.settings.submenu_style == 'bold_text' %}class="reversed-link hover:show"{% endif %}>{{- sub_sub_link.title -}}</span>
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2.6377 6H9.3577" stroke="#555555" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M5.99805 2.64014L9.35805 6.00014L5.99805 9.36014" stroke="#555555" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+          
+                              </span>
+                          <span class="mm-bottom-text">
+                            <span>Mini Karaoke Machine</span>
+                             {% if sub_sub_link.type == 'product_link' %}
+                               <div class="mmb-img-wrapper">
+                                 <div class="mmb-img">
+                                 <img src="{{ sub_sub_link.object.featured_image | img_url:'500x'}}">
+                                 </div>
+                               </div>
+                                {% endif %}
+                          </span>
+                            </a>
+                          {% endfor %}
+                      </div>
+                      </div>
+                                </div>
+                      {% else %}
+                    <a href="{{ sub_link.url }}" class="link-padding">{{ sub_link.title }}</a>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                
+              {%- else -%}
+                <a href="{{ link.url }}" class="group block w-full link-padding">
+                  <span><span class="reversed-link">{{ link.title }}</span></span>
+                </a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+
+                        {% if announce_text %}
+               <p class="nav_ann-text">{{ announce_text }}</p>
+                          {% endif %}
+        </ul>
+
+        {%- if secondary_menu != blank -%}
+          <ul class="v-stack gap-3">
+            {%- for link in secondary_menu.links -%}
+              <li>
+                <a href="{{ link.url }}" class="h6 group"><span><span class="reversed-link">{{ link.title }}</span></span></a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      {%- if is_mega_menu -%}
+        {%- render 'navigation-promo-block', navigation_layout: layout, mega_menu_block: mega_menu_block, is_navigation_drawer: true, link_col: link.links.size -%}
+      {%- else -%}
+       
+        
+      {%- endif -%}
+    </div>
+  </div>
+
+</div>

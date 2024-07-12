@@ -1,0 +1,289 @@
+{%- comment -%}
+------------------------------------------------------------------------------------------------------------------------
+NOTE TO DEVELOPERS: welcome to Impact theme! We hope that you will enjoy editing this theme as much as we did for
+  developing it. We have put a lot of work to make this theme as developer friendly as possible by offering you
+  hooks to integrate into critical parts of the theme. You will find the complete technical documentation (including
+  all events, dependencies...) in the "documentation.txt" file, located in the Assets folder.
+------------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+<!doctype html>
+
+<html lang="{{ request.locale.iso_code }}" dir="{% render 'direction' %}">
+  <head>
+
+    <!-- Start cookieyes banner --> <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/common/shopify.js"></script> <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/e614f77a45fa3e35496bf034/script.js"></script> <!-- End cookieyes banner -->
+
+     <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-N6CQG7T');</script>
+<!-- End Google Tag Manager -->
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-07XPP74PS2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-07XPP74PS2');
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZN9VWXE0E9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZN9VWXE0E9');
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NE0Q50TBXF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NE0Q50TBXF');
+</script>
+    
+<meta name="google-site-verification" content="gtBrvvIlL-MR4G9s35koc4OFo6SQ6JHBMw-WoFG0K88" />
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="theme-color" content="{{ settings.header_background }}">
+
+    <title>{% if page_title == blank %}{{ shop.name }}{% else %}{{ page_title }}{% if current_page != 1 %} &ndash; {{ 'general.page' | t: page: current_page }}{% endif %}{% endif %}</title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.favicon -%}
+      <link rel="shortcut icon" href="{{ settings.favicon | image_url: width: 96 }}">
+      <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180 }}">
+    {%- endif -%}
+
+    {%- comment -%}Few prefetch to increase performance on commonly used third-parties{%- endcomment -%}
+    <link rel="preconnect" href="https://cdn.shopify.com">
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    <link rel="dns-prefetch" href="https://productreviews.shopifycdn.com">
+
+    {%- unless settings.heading_font.system? -%}
+      <link rel="preload" href="{{ settings.heading_font | font_url }}" as="font" type="font/woff2" crossorigin>
+    {%- endunless -%}
+
+    {%- unless settings.text_font.system? -%}
+      <link rel="preload" href="{{ settings.text_font | font_url }}" as="font" type="font/woff2" crossorigin>
+    {%- endunless -%}
+
+    {%- render 'social-meta-tags' -%}
+    {%- render 'microdata-schema' -%}
+    {%- render 'css-variables' -%}
+    {%- render 'js-variables' -%}
+
+    <script type="module" src="{{ 'vendor.min.js' | asset_url }}"></script>
+    <script type="module" src="{{ 'theme.js' | asset_url }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script type="module" src="{{ 'sections.js' | asset_url }}"></script>
+   <script type="module" src="{{ 'custom.js' | asset_url }}"></script>
+    {{ content_for_header }}
+
+    {{- 'theme.css' | asset_url | stylesheet_tag: preload: true -}}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+  {% include 'pagefly-app-header' %}</head>
+
+  <body class="page-{{ page.handle }} template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }} {% if settings.show_page_transition %}page-transition{% endif %} {% if settings.zoom_image_on_hover %}zoom-image--enabled{% endif %}">
+    {%- render 'shadow-dom-templates' -%}
+
+    <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N6CQG7T"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+    <a href="#main" class="skip-to-content sr-only">{{ 'general.accessibility.skip_to_content' | t }}</a>
+
+    {%- if request.page_type != 'password' -%}
+      {%- sections 'header-group' -%}
+      {%- sections 'overlay-group' -%}
+
+      {%- if settings.cart_type == 'popover' -%}
+        <cart-notification-drawer open-from="bottom" class="quick-buy-drawer drawer"></cart-notification-drawer>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if request.page_type == 'customers/account' or request.page_type == 'customers/order' or request.page_type == 'customers/addresses' -%}
+      {%- section 'account-banner' -%}
+    {%- endif -%}
+
+    <main role="main" id="main" class="anchor">
+      {{ content_for_layout }}
+
+      {%- comment -%}
+      IMPLEMENTATION NOTE: due to the very complex logic of margin/padding collapsing in Impact, the footer group is
+      added into the main element to ensure that dynamic sections added into the footer group are properly laid out.
+      {%- endcomment -%}
+      {%- if request.page_type != 'password' -%}
+        {%- sections 'footer-group' -%}
+      {%- endif -%}
+    </main>
+    <script>
+$('.testimonial-slideshow').slick({
+  dots: true,
+  infinite: false,
+  slidesToShow: 2,
+  slidesToScroll: 1,
+      prevArrow: $('.ht-prev'),
+      nextArrow: $('.ht-next'),
+  responsive: [
+  {
+    breakpoint: 591,
+    settings: {
+      slidesToShow: 1,
+      centerMode: true
+    }
+  }
+  ]
+});
+
+$('.insta-top-slider').slick({
+    slidesToShow: 6,
+    slidesToScroll: 1,
+    arrows: false,      
+    autoplay: true,
+      centerMode: true,
+    autoplaySpeed: 2000,
+    rtl:false,
+      responsive: [
+  {
+    breakpoint: 1280,
+    settings: {
+      slidesToShow: 5,
+      slidesToScroll: 1
+    }
+  },
+    {
+    breakpoint: 768,
+    settings: {
+      slidesToShow: 4,
+      slidesToScroll: 1
+    }
+  },
+  {
+    breakpoint: 480,
+    settings: {
+      slidesToShow: 3,
+      slidesToScroll: 1
+    }
+  }
+  ]
+});
+$('.insta-bottom-slider').slick({
+      slidesToShow: 6,
+      slidesToScroll: 1,
+      arrows: false,
+      centerMode: true,
+      rtl:true,
+      autoplay: true,
+      autoplaySpeed: 2000,
+    responsive: [
+  {
+    breakpoint: 1280,
+    settings: {
+      slidesToShow: 5,
+      slidesToScroll: 1
+    }
+  },
+    {
+    breakpoint: 768,
+    settings: {
+      slidesToShow: 4,
+      slidesToScroll: 1
+    }
+  },
+  {
+    breakpoint: 480,
+    settings: {
+      slidesToShow: 3,
+      slidesToScroll: 1
+    }
+  }
+  ]
+});
+      
+    $('.video__youtube').slick({
+  dots: true,
+  infinite: false,
+  slidesToShow: 1, 
+  slidesToScroll:1,
+  prevArrow: '<div class="slick-prev"><img src="{{ 'Arrow-left.png' | asset_url }}" /></div>',
+  nextArrow: '<div class="slick-next"><img src="{{ 'Arrow-right.png' | asset_url }}" /></div>'
+});
+$('.photo-gallery-slider').slick({
+  arrows: false,
+  dots: true,
+  slidesToShow: 1, 
+  slidesToScroll:1
+});      
+      
+  $('.mm-sub-nav').hover(function(){
+$('.mm-sub-nav').removeClass('v-sub-active');
+$(this).addClass('v-sub-active');
+var a = $(this).data('value');
+    $('.mega-menu__subnav-item').each(function(){
+var b = $(this).data('value');
+var c = $(this).data('id');
+if ( b == a ){
+$(this).addClass('mm-subnav-active');
+$('.mega-menu-wrapper').attr('data-id','');
+$('.mega-menu-wrapper').attr('data-id',c);
+}else{
+$(this).removeClass('mm-subnav-active');
+}
+        
+    });
+});
+
+//       $('.sub_nav_toggle').click(function(){
+// $(this).toggleClass('sub_nav_active');
+//     $(this).next().slideToggle();
+// });
+$(".sub_nav_toggle").click(function() {
+    $(this).toggleClass("sub_nav_active").next('.nav-panel-sub-nav').slideToggle(250)
+    .closest('.site-nav-mob').siblings().find('.sub_nav_toggle').removeClass('sub_nav_active').next('.nav-panel-sub-nav').slideUp(250);
+  $(".sub_sub_nav_toggle").removeClass('sub_sub_nav_active');
+  $('.nav-panel-sub_sub_nav').slideUp(250);
+});
+//       $('.sub_sub_nav_toggle').click(function(){
+// $(this).toggleClass('sub_sub_nav_active');
+//     $(this).next().slideToggle();
+// });
+
+
+$(".sub_sub_nav_toggle").click(function() {
+    $(this).toggleClass("sub_sub_nav_active").next('.nav-panel-sub_sub_nav').slideToggle(250)
+    .closest('.nav-top-sub-item').siblings().find('.sub_sub_nav_toggle').removeClass('sub_sub_nav_active').next('.nav-panel-sub_sub_nav').slideUp(250);
+});  
+$(".search_nav_toggle").click(function() {
+    $(this).toggleClass("search_nav_active").next('.search-sub-nav').slideToggle(250)
+    .closest('.search-nav-item').siblings().find('.search_nav_toggle').removeClass('search_nav_active').next('.search-sub-nav').slideUp(250);
+});     
+
+$(".product-info__rating .rating").click(function(e) {
+    e.preventDefault();
+    $('html,body').animate({
+        scrollTop: $("#az_reviews").offset().top - 100},
+        'slow');
+});
+      
+    </script>
+  </body>
+</html>
