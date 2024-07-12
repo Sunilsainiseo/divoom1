@@ -1,6 +1,6 @@
 .country-flags {
-  background: -webkit-image-set(url("//divoom.com/cdn/shop/t/63/assets/country-flags.png?v=37230036826556269641717678089") 1x, url("//divoom.com/cdn/shop/t/63/assets/country-flags-2x.png?v=119388446682176363021717678089") 2x) no-repeat top left;
-  background: image-set(url("//divoom.com/cdn/shop/t/63/assets/country-flags.png?v=37230036826556269641717678089") 1x, url("//divoom.com/cdn/shop/t/63/assets/country-flags-2x.png?v=119388446682176363021717678089") 2x) no-repeat top left;
+  background: -webkit-image-set(url("//divoom.com/cdn/shop/t/100/assets/country-flags.png?v=37230036826556269641720604192") 1x, url("//divoom.com/cdn/shop/t/100/assets/country-flags-2x.png?v=119388446682176363021720604192") 2x) no-repeat top left;
+  background: image-set(url("//divoom.com/cdn/shop/t/100/assets/country-flags.png?v=37230036826556269641720604192") 1x, url("//divoom.com/cdn/shop/t/100/assets/country-flags-2x.png?v=119388446682176363021720604192") 2x) no-repeat top left;
   width: 20px;
   height: 20px;
   flex-shrink: 0;

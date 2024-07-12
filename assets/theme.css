@@ -11429,7 +11429,7 @@ button .animated-arrow:before {
   opacity:0;
   visibility:hidden;
 }
-
+}
 .breadcrumbs__item:not(:last-child):after {
     height: 10px;
     width: 10px;
@@ -12436,7 +12436,7 @@ a.info-row {
   background-color: rgb(var(--background));
 }
 #custom-faq details.accordion[open],
-#custom-faq details.accordion:hover
+#custom-faq details.accordion:hover,
 {
   box-shadow: 4px 4px 0px 0px #111;
 }
